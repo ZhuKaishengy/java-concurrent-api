@@ -1,6 +1,6 @@
 package chapter01.example03;
 
-import chapter01.common.Unsafe;
+import common.Unsafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
