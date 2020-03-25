@@ -13,9 +13,7 @@ import java.util.concurrent.CyclicBarrier;
 @Slf4j
 public class CyclicBarrierTest {
 
-    private static CyclicBarrier cyclicBarrier = new CyclicBarrier(3, () -> {
-        log.info("touch barrier");
-    });
+    private static CyclicBarrier cyclicBarrier = new CyclicBarrier(3, () -> log.info("touch barrier"));
 
     public static void main(String[] args) {
         Thread thread1 = new Thread(() -> {

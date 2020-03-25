@@ -24,11 +24,13 @@ public class MainTest {
         };
 
         Thread thread1 = new Thread(() -> {
+            log.info(String.valueOf(phaser.getPhase()));
             phaser.awaitAdvance(0);
             log.info("thread1 after await ...");
         });
 
         Thread thread2 = new Thread(() -> {
+            log.info(String.valueOf(phaser.getPhase()));
             phaser.awaitAdvance(0);
             log.info("thread2 after await ...");
         });
@@ -37,7 +39,7 @@ public class MainTest {
         thread2.start();
         // awaitAdvance 方法不可被中断
         thread1.interrupt();
-        Thread.sleep(1000);
+        Thread.sleep(5000);
 
         while (phaser.getPhase() < 1) {
             log.info("++");

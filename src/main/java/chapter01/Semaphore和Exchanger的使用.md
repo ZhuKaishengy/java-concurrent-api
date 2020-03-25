@@ -20,7 +20,7 @@ Exchanger
 示例代码参考example01包。
 
 ### 1.1.2 类Semaphore构造方法permits参数作用
-参数permits的作用是设置许可的个数，`privateSemaphore semaphore = newSemaphore(1);`
+参数permits的作用是设置许可的个数，`private Semaphore semaphore = newSemaphore(1);`
 来进行程序的设计，使同一时间内最多只有1个线程可以执行acquire()和release()之间的代码，因为只有1个许可。
 其实还可以传入>1的许可，代表同一时间内，最多允许有x个线程可以执行acquire()和release()之间的代码。
 示例代码参考example02包。

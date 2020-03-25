@@ -55,6 +55,7 @@ public class DataService {
             producerSemaphore.acquire();
             lock.lock();
             while (isFull()) {
+                log.info("producer:{} is waiting...", Thread.currentThread().getName());
                 producerCondition.await();
             }
             storeList.add(obj);
@@ -77,6 +78,7 @@ public class DataService {
             consumerSemaphore.acquire();
             lock.lock();
             while (isEmpty()) {
+                log.info("consumer:{} is waiting...", Thread.currentThread().getName());
                 consumerCondition.await();
             }
             Object data = storeList.remove(0);

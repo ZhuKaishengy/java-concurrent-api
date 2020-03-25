@@ -103,3 +103,4 @@ CountDownLatch类的计数不可以重置，想要再次获得同步的功能只
 ## 2.3 本章总结
 
 本章主要介绍了CountDownLatch、CyclicBarrier这两个类的使用，**使用CountDown-Latch类可以实现两种角色的线程等待对方的效果，而CyclicBarrier类可以使同类线程互相等待达到同步的效果，使用这两个类可以更加完善地实现线程对象之间的同步性**，对线程对象执行的轨迹控制更加方便。
+

@@ -11,8 +11,8 @@ public class DataServiceMain {
 
     public static void main(String[] args) throws InterruptedException {
 
-        Thread[] producers = new Thread[20];
-        Thread[] consumers = new Thread[20];
+        Thread[] producers = new Thread[30];
+        Thread[] consumers = new Thread[30];
         for (int i = 0; i < producers.length; i++) {
             producers[i] = new ProducerThread(DATASERVICE, "数据-" + i);
         }
@@ -20,7 +20,7 @@ public class DataServiceMain {
             consumers[i] = new ConsumerThread(DATASERVICE);
         }
         Thread.sleep(1000);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 30; i++) {
             producers[i].start();
             consumers[i].start();
         }
