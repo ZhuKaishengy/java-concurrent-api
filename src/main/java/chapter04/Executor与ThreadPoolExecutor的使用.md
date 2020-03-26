@@ -93,5 +93,110 @@
 
 示例代码参考example06包。
 
+### 4.3.2 方法shutdown()和shutdownNow()与返回值
 
+方法shutdown()的作用是**使当前未执行完的线程继续执行，而不再添加新的任务Task**，还有shutdown()方法不会阻塞，调用shutdown()方法后，主线程main就马上结束了，而线程池会继续运行直到所有任务执行完才会停止。如果不调用shutdown()方法，那么线程池会一直保持下去，以便随时执行被添加的新Task任务。
 
+方法shutdownNow()的作用是中断所有的任务Task，并且抛出InterruptedException异常，前提是在Runnable中使用if (Thread.currentThread().isInterrupted() == true)语句来判断当前线程的中断状态，而未执行的线程不再执行，也就是从执行队列中清除。如果没有if (Thread.currentThread().isInterrupted() == true)语句及抛出异常的代码，则**池中正在运行的线程直到执行完毕，而未执行的线程不再执行**，也从执行队列中清除。
+
+当线程池调用shutdown()方法时，线程池的状态则立刻变成SHUTDOWN状态，此时不能再往线程池中添加任何任务，否则将会抛出**RejectedExecutionException**异常。但是，此时线程池不会立刻退出，直到线程池中的任务都已经处理完成，才会退出。
+而shutdownNow()方法是使线程池的状态立刻变成STOP状态，并试图停止所有正在执行的线程（如果有if判断则人为地抛出异常），不再处理还在池队列中等待的任务，当然，**它会返回那些未执行的任务**。
+
+示例代码参考example07包。
+
+### 4.3.3 方法isShutdown()
+
+方法isShutdown()的作用是判断线程池是否已经关闭。只要调用了shutdown ()方法，isShutdown()方法的返回值就是true。
+
+示例代码参考example07包。
+
+### 4.3.4 方法isTerminating()和isTerminated()
+
+如果正在执行的程序处于shutdown或shutdownNow之后处于正在终止但尚未完全终止的过程中，调用方法isTerminating()则返回true。此方法可以比喻成，门是否正在关闭。门彻底关闭时，线程池也就关闭了。
+如果线程池关闭后，也就是所有任务都已完成，则方法isTerminated()返回true。此方法可以比喻成，门是否已经关闭。
+
+示例代码参考example08包。
+
+### 4.3.5 方法awaitTermination(long timeout, TimeUnit unit)
+
+方法awaitTermination(long timeout, TimeUnit unit)的作用就是查看在指定的时间之间，线程池是否已经终止工作，也就是最多等待多少时间后去判断线程池是否已经终止工作。
+此方法需要有shutdown()方法的配合。
+
+示例代码参考example08包。
+
+### 4.3.6 工厂ThreadFactory+execute()+UncaughtExceptionHandler处理异常
+
+有时需要对线程池中创建的线程属性进行定制化，这时就得需要配置ThreadFactory线程工厂。
+
+示例代码参考example09包。
+
+### 4.3.7 方法set/getRejectedExecutionHandler()
+
+方法setRejectedExecutionHandler()和getRejectedExecutionHandler()的作用是可以处理任务被拒绝执行时的行为。
+
+示例代码参考example10包。
+
+### 4.3.8 方法allowsCoreThreadTimeOut()/(boolean)
+
+方法allowsCoreThreadTimeOut()和allowsCoreThreadTimeOut(boolean value)的作用是配置核心线程是否有超时的效果。
+
+示例代码参考example11包。
+
+### 4.3.9 方法prestartCoreThread()和prestartAllCoreThreads()
+
+方法prestartCoreThread()每调用一次就创建一个核心线程，返回值为boolean，含义是是否启动了。
+方法prestartAllCoreThreads()的作用是启动全部核心线程，返回值是启动核心线程的数量。
+
+示例代码参考example12包。
+
+### 4.3.10 方法getCompletedTaskCount()
+
+方法getCompletedTaskCount()的作用是取得已经执行完成的任务数。
+
+示例代码参考example13包。
+
+### 4.3.11 常见3种队列结合max值的因果效果
+
+在使用ThreadPoolExecutor线程池的过程中，常使用3种队列**ArrayBlockingQueue、LinkedBlockingDeque和SynchronousQueue**。其中ArrayBlockingQueue和LinkedBlockingDeque类可以指定队列存储元素的多少，如果传入capacity值是<=0时是出现异常的。
+那么本节要实验的环境是欲执行任务的数量大于ThreadPoolExecutor线程池的maximum-PoolSize最大值时，在不同队列中会出现什么样的情况。
+
+示例代码参考example13包。
+
+### 4.3.12 线程池ThreadPoolExecutor的拒绝策略
+
+线程池中的资源全部被占用的时候，对新添加的Task任务有不同的处理策略，在默认的情况下，ThreadPoolExecutor类中有4种不同的处理方式：
+
+* AbortPolicy：当任务添加到线程池中被拒绝时，它将抛出RejectedExecutionException异常（默认策略）
+* CallerRunsPolicy：当任务添加到线程池中被拒绝时，会使用调用线程池的Thread线程对象处理被拒绝的任务。
+* DiscardOldestPolicy：当任务添加到线程池中被拒绝时，线程池会放弃等待队列中最旧的未处理任务，然后将被拒绝的任务添加到等待队列中。
+* DiscardPolicy：当任务添加到线程池中被拒绝时，线程池将丢弃被拒绝的任务。
+
+示例代码参考example13包。
+
+### 4.3.13 方法afterExecute()和beforeExecute()
+
+在线程池ThreadPoolExecutor类中重写这两个方法可以对线程池中执行的线程对象实现监控。
+
+示例代码参考example13包。
+
+### 4.3.14 方法remove(Runnable)的使用
+
+方法remove(Runnable)可以删除尚未被执行的Runnable任务。
+
+示例代码参考example13包。
+
+### 4.3.15 多个get方法
+
+线程池ThreadPoolExecutor有很多getX()方法，熟悉这些方法是观察线程池状态最好的方式。
+
+* 方法getActiveCount()的作用是取得有多少个线程正在执行任务。
+* 方法getPoolSize()获得的是当前线程池里面有多少个线程，这些线程数包括正在执行任务的线程，也包括正在休眠的线程。
+* 方法getActiveCount()获得正在执行任务的线程数。
+* 方法getCompletedTaskCount()的作用是取得有多少个线程已经执行完任务了。
+* 方法getCorePoolSize()的作用是取得构造方法传入的corePoolSize参数值。
+* 方法getMaximumPoolSize()的作用是取得构造方法传入的maximumPoolSize参数值。
+* 方法getTaskCount()的作用是取得有多少个任务发送给了线程池。
+
+## 4.4 本章总结
+
+本章主要介绍ThreadPoolExecutor类的构造方法中各个参数的作用与使用效果，还介绍了Executors工厂类常用API的使用，也将大部分ThreadPoolExecutor线程池类的常见API一同进行了介绍，并且对ThreadPoolExecutor线程池的拒绝策略进行了实验，通过使用线程池能最大幅度地减少创建线程对象的内存与CPU开销，加快程序运行效率，也对创建线程类的代码进行了封装，方便开发并发类型的软件项目。
